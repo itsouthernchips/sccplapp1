@@ -247,3 +247,18 @@ app_license = "mit"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+fixtures = [
+    # Exports your two custom fields on the Purchase Order
+    {"dt": "Custom Field", "filters": [["dt", "=", "Purchase Order"]]},
+    
+    # Exports your Server Script
+    {"dt": "Server Script", "filters": [["name", "=", "PO Price Check"]]},
+    
+    # Exports the Workflow and states
+    {"dt": "Workflow", "filters": [["name", "=", "PO Expense Approval"]]},
+    "Workflow State",
+    "Workflow Action Master",
+    
+    # Exports your email notifications for POs
+    {"dt": "Notification", "filters": [["document_type", "=", "Purchase Order"]]}
+]

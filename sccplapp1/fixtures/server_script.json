@@ -1,0 +1,21 @@
+[
+ {
+  "allow_guest": 0,
+  "api_method": null,
+  "cron_format": null,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Server Script",
+  "doctype_event": "Before Save",
+  "enable_rate_limit": 0,
+  "event_frequency": "All",
+  "modified": "2026-08-10 11:40:32.701029",
+  "module": "sccplapp1",
+  "name": "PO Price Check",
+  "rate_limit_count": 5,
+  "rate_limit_seconds": 86400,
+  "reference_doctype": "Purchase Order",
+  "script": "# Initialize the custom field to 0\ndoc.custom_needs_expense_approval = 0\ndetails = []\n\nfor item in doc.items:\n    # Fetch the last purchase rate from the Item master (default to 0 if none exists)\n    last_rate = frappe.db.get_value(\"Item\", item.item_code, \"last_purchase_rate\") or 0.0\n    \n    # If the current rate is higher, flag the custom field\n    if item.rate > last_rate:\n        doc.custom_needs_expense_approval = 1\n        details.append(f\"<b>Item:</b> {item.item_code} ({item.item_name})<br>\"\n                       f\"<b>Last Rate:</b> {last_rate}<br>\"\n                       f\"<b>New Rate:</b> {item.rate}<br>\")\n\n# If approval is needed, format the details for the custom text field\nif doc.custom_needs_expense_approval:\n    doc.custom_price_increase_details = \"<br><br>\".join(details)\nelse:\n    doc.custom_price_increase_details = \"\"",
+  "script_type": "DocType Event"
+ }
+]
